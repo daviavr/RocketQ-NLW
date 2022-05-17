@@ -55,9 +55,16 @@ module.exports = {
         
         res.render("room", {roomId: roomId, questions: questions, questionsRead: questionsRead, isNoQuestions: isNoQuestions})
     },
-    enter(req, res){
+    async enter(req, res){
         const roomId = req.body.roomId
+        const db = await Database()
+        const roomsExists = await db.all(`SELECT ${roomId} FROM rooms`)
 
-        res.redirect(`/room/${roomId}`)
+        if(roomsExists){
+            res.redirect(`/room/${roomId}`)
+        }
+        else{
+            alert("Sala não existe")
+        }
     }
 }
